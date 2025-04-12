@@ -1,0 +1,54 @@
+<%- include('../../partials/header') %>
+
+<div class="container w-75">
+    
+    <div class="notifications row justify-content-center">
+        <div class="col-6">
+        <img src="<%= notification.post.img%>" alt="">
+        <div class="dateAndcontent d-flex justify-content-between">
+            <p class="memory"><%=notification.post.memory%> <strong><%= notification.post.cdate%></strong></p>
+        </div>
+       
+        <div class="likesCommentsAndShare container d-flex justify-content-around">
+           <% if(loggedInUser){ %>
+               <div class="like d-flex">
+                   <form action="/posts/<%=notification.post.id%>/like" method="post">
+                       <button class="btn btn-success btn-sm" type="submit">Like</button>
+                   </form>
+               </div>
+               <div class="comment">
+                   <form action="/posts/<%=notification.post.id%>/comment" method="post">
+                       <!-- <textarea name="comment" id="comment" placeholder="add your comment" rows="1" cols="30"></textarea> -->
+                        <input type="text" name="comment" id="comment" placeholder="add your comment">
+                       <button type="submit">comment</button>
+                   </form>
+               </div>
+               <div class="share">
+                   <form action="/posts/<%= notification.post.id %>/share" method="post">
+                       <button class="btn btn-primary btn-sm" type="submit">Share</button>
+                   </form>
+               </div>
+               <% } %>
+        </div>
+        <!-- likes comments share count -->
+        <div class="likesCmntShareCount d-flex justify-content-around my-2">
+            <div class="likes">
+                <p class="px-3"><strong class="likesCount"><%= notification.post.likes.length%></strong></p>
+            </div>
+            <div class="cmnts"><strong><%= notification.post.comments.length%></strong> comments </div>
+            <div class="shares"><%= notification.post.shareContent.length%> shares</div>
+        </div>
+    
+        <!-- commments display -->
+        <div class="display-comments container border rounded my-3 py-2">
+            <h3>Comments !</h3>
+            <ul>
+                <% notification.post.comments.forEach((comment, i)=>{ %>
+                    <li class="d-flex justify-content-start"><p><strong><%= comment.author%></strong>:   </p><p class="mx-2"><%= comment.comment %></p>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+        </div>
+    </div>
+</div>

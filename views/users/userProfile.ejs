@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user profile</title>
+</head>
+<body>
+<h1>My Posts</h1>
+            <% if(posts.length > 0){  %>
+                <% posts.forEach((post)=>{ %>
+                    <p><%= post.memory %> </p>
+                    <img src="<%=post.img%>" alt="userImg"><br>
+                    <i class="date"><%= post.cdate%></i>
+                <% }) %>
+                <% }else{%>
+                    <h2>You have yet No Post !</h2>
+                <% } %>
+</body>
+</html>

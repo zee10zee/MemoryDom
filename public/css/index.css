@@ -1,0 +1,43 @@
+
+body{
+  /* max-width: 700px !important; */
+}
+.likesCommentsShares,.likesCmntShareCount{
+  display: flex;
+  justify-content: space-between;
+}
+
+body{
+    background-color: aliceblue;
+   
+}
+
+.navbar{
+  position: fixed !important;
+  width: 90%;
+  margin: auto 50px;
+}
+
+
+.showPostContainer{
+  width: 600px !important;
+  margin: 0 auto !important;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: blue;
+}
+
+.showPostContainer .showPostImg{
+  width: 450px !important;
+  height: 300px !important;
+}
+
+.showPostImg{
+    width: 300px !important;
+}
+
+#postImg{
+  width: 200px;
+}

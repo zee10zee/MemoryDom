@@ -1,0 +1,139 @@
+<%- include('../partials/header') %>
+      
+     <div class="postInfo container w-50">
+        <h1>THE POSTS !</h1>
+        <div class="row my-3">
+             
+        <% posts.forEach((post, i )=>{%>
+          
+            <div class="col-12  details card mx-3">
+              <img class="card-img-top img-thumbnail img-fluid mx-auto h-50" src="<%=post.img%>" alt="Card IMG TOP">
+               <div class="card-body">
+                <i class="currentDate"> <%= post.cdate %></i>
+                <p class="memory"><%= post.memory.substr(0, 50) %> <a href="/show/<%= post.id %>">read More</a></p>
+                 <i class="createdBy">createdBy :<a href="/postOwnerProfile/<%= post.userid %>">
+                    <%= post.user.firstName %> <%= post.user.lastName %></a></i>
+                
+                <div class="updates d-flex justify-content-evenly mt-1">
+                    <% if(loggedInUser && loggedInUser.userId === post.userid){ %>
+                     <a href="/edit/<%= post.id %>" class="edit btn btn-success btn-sm">Edit</a>
+                     <form action="/delete/<%=post.id%>?_method=DELETE" method="post">
+                        <button type="submit" class=" btn btn-danger btn-sm">Delete</a>
+                    </form>
+                    <% } %>
+                </div>
+    
+               </div>
+               <div class=" container likesCommentsShares">
+                <% if(loggedInUser){ %>
+                <div class="like d-flex">
+                    <form action="/posts/<%=post.id%>/like" method="post">
+                        <button class="btn btn-success btn-sm" type="submit">Like</button>
+                    </form>
+                </div>
+                <div class="comment">
+                    <form action="/posts/<%=post.id%>/comment" method="post">
+                        <!-- <textarea name="comment" id="comment" placeholder="add your comment" rows="1" cols="30"></textarea> -->
+                         <input type="text" name="comment" id="comment" placeholder="add your comment">
+                        <button type="submit">comment</button>
+                    </form>
+                </div>
+                <div class="share">
+                    <form action="/posts/<%= post.id %>/share" method="post">
+                        <button class="btn btn-primary btn-sm" type="submit">Share</button>
+                    </form>
+                </div>
+                <% } %>
+            </div>
+            <div class="likesCmntShareCount">
+                <div class="likes">
+                    <p class="px-3"><strong class="likesCount"><%= post.likes.length%></strong></p>
+                </div>
+                <div class="cmnts"><strong><%= post.comments.length%></strong> comments </div>
+                <div class="shares"><%= post.shareContent.length%> shares</div>
+            </div>
+
+            <div class="display-comments container border rounded my-3 py-2">
+                <h3>Comments !</h3>
+                <ul>
+                    <% post.comments.forEach((comment, i)=>{ %>
+                        <li class="d-flex" id="comment-<%=comment.comment_Id%>">
+                            <p><strong><%= comment.author%></strong>:   </p><p class="commentText mx-2"><%= comment.comment %></p>
+                            <div class="edit-delete d-flex justify-content-between px-3">
+                                <form action="" method="get"  class="editButton mx-2">
+                                    <a class="btn btn-success btn-sm editButton" data-toggle="modal" data-target = "#EditCommentModal"  data-comment-id = "<%=comment.comment_Id%>">Edit</a>
+                                </form>
+                                  <!-- modal start -->
+                       <div class="modal fade" id="EditCommentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Edit Comment</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                <div class="form-group">
+                                    <label for="comment" class="col-form-label">new comment</label>
+                                    <input type="hidden" id="commentId" name="commentId" value = "<%=comment.comment_Id%>">
+                                    <input type="text" class="form-control" name="commentInput" id="commentInput"  value="<%=comment.comment%>">
+                                </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <form  action="/comment/update" method="post">
+                                    <button type="submit" class="btn btn-primary updatedButton" id="updateButton">update</button>
+                                </form>
+                            </div>
+                         </div>
+                        </div>
+                    </div>
+                        <!-- modal ends -->
+                                <form action="/comment/<%=comment.comment_Id%>/delete" method="post" class="mx-2">
+                                    <button type="submit" class="btn btn-danger btn-sm">delete</button>
+                                </form>
+                            </div>
+                        </li>
+                     
+                    <% }) %>
+                </ul>
+            </div>
+            </div>
+        <% }) %>
+            <!-- modal -->
+           
+            <!-- end of modal -->
+    </div>
+
+     <!-- sharedPost -->
+     <div class="sharedPost container">
+        <h1>shared post</h1>
+        <div class="row my-3">
+            <% posts.forEach((post)=>{ %>
+                <% post.shareContent.forEach((sharedPost)=>{%>
+                    <div class="col-12 card my-3">
+                        <img class="card-img-top img-thumbnail img-fluid mx-auto h-50" src="<%= sharedPost.postImg%>" alt="Card IMG TOP">
+                        <div class="card-body">
+                            <a href="/postOwnerProfile/" class="sharedby">
+                                shared by: 
+                            </a>
+                           
+                         <i class="currentDate"> <%= sharedPost.postDate %></i>
+                         <p class="memory"><%=sharedPost.description.substr(0, 50) %> 
+                            <a href="/show/<%= post.id %>">read More</a>
+                        </p>
+                            <i class="createdBy">createdBy :
+                                <a href="/postOwnerProfile/<%= sharedPost.originalUserId %>">
+                                    <%= sharedPost.originalUser.firstName %> <%= sharedPost.originalUser.lastName %>
+                                </a>
+                            </i>    
+                    </div>
+    
+                <% }) %>
+           <% }) %>
+         </div>
+         </div>
+        </div>
+        
+       
+     <%- include('../partials/footer') %>

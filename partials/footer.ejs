@@ -1,0 +1,50 @@
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<!-- Popper.js (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- <script>
+
+    let EditButton = document.querySelectorAll('.editButton')
+    EditButton.forEach((button)=>{
+        button.addEventListener('click', (e)=>{
+            // getting the attribute of edit button which was data-comment-id
+           const commentId = e.target.getAttribute('data-comment-id')
+        //    getting the COMMENT of clicked edit
+           const commentText = document.querySelector(`#comment-${commentId} p.commentText`).textContent
+           console.log(commentId, " comment text "  + commentText)
+
+        //    set the values in the modal input
+
+         const hiddenCommentId = document.getElementById('commentId').value = commentId
+         const updateInput = document.getElementById('updateInput').value = commentText
+         console.log(hiddenCommentId.textContent, updateInput)
+
+         $('#EditCommentModal').modal('show');
+
+        })
+    }) -->
+
+    <!-- // form submission 
+
+    const updateBtn = document.getElementById('updateButton')
+    console.log(updateBtn)
+
+     updateBtn.addEventListener('submit', (e)=>{
+        const commentid = document.getElementById('commentId').value
+          let  CommentText = document.querySelector(`#comment-${commentid} p.commentText`).textContent
+          let updateInput = document.getElementById('updateInput').value
+         CommentText = updateInput
+         console.log(CommentText)
+
+         $('#EditCommentModal').modal('hide');
+
+     }) -->
+<!-- </script> -->
+</body>
+</html>
