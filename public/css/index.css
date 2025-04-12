@@ -41,6 +41,19 @@ body{
 }
 
 #userProfile, #signUpForm, #activeUserProfile, #showPosts, #addPost, #loginForm{
-  width: 50%;
   margin-top: 100px !important; 
+}
+
+ #loginForm, #signUpForm{
+  width: 550px !important;
+  margin: 0 auto;
+}
+
+
+
+@media screen and (max-width : 1010px) {
+  #addPost, #loginForm{
+    width: 400px;
+  }
+  
 }
