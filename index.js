@@ -11,7 +11,7 @@ var app = express()
 
 
 app.use(session({
-    secret: process.env.SESSION_SECRET,  // Secret key to sign the session cookie
+    secret: process.env.SESSION_SECRET || 'hello world',  // Secret key to sign the session cookie
     resave: false,               // Don't save session if it wasn't modified
     saveUninitialized: true,     // Save sessions even if they are not initialized
     cookie: { secure: false }    // Set to true for HTTPS, false for development (HTTP)

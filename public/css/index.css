@@ -7,19 +7,27 @@
 
 body{
     background-color: aliceblue;
+    /* background-color: blue !important; */
    
 }
 
 .navbar{
-  position: fixed !important;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 90%;
-  margin: auto 50px;
+  margin: 0px 50px !important;
+  z-index: 1;
 }
 
 
+.container.signUpForm{
+  margin-top: 100px !important;
+}
+
 .showPostContainer{
   width: 600px !important;
-  margin: 0 auto !important;
+  margin:  0 auto !important;
   display: flex !important;
   flex-direction: column;
   justify-content: center;
@@ -32,10 +40,6 @@ body{
   height: 300px !important;
 }
 
-.showPostImg{
-    width: 300px !important;
-}
-
-#postImg{
-  width: 200px;
+#userProfile, #signUpForm, #activeUserProfile, #showPosts{
+  margin-top: 100px !important; 
 }

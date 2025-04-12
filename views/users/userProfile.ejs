@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>user profile</title>
-</head>
-<body>
-<h1>My Posts</h1>
+<%- include('../../partials/header') %>
+<div class="container" id="userProfile">
+    <h1>My Posts</h1>
             <% if(posts.length > 0){  %>
                 <% posts.forEach((post)=>{ %>
                     <p><%= post.memory %> </p>
@@ -16,5 +10,5 @@
                 <% }else{%>
                     <h2>You have yet No Post !</h2>
                 <% } %>
-</body>
-</html>
+</div>
+<%- include('../../partials/footer') %>
