@@ -1,14 +1,25 @@
 <%- include('../../partials/header') %>
 
-<div class="container" id="activeUserProfile">
-    <h1><%= user.firstName%>'s POSTS</h1>
-<% posts.forEach((post)=>{ %>
-   <p><%= post.memory %></p>
-   <img src="<%= post.img %>" alt=""><br>
-   <i class="cd"><%=post.cdate%></i>
-<% }) %>
+
+    
+
+   
 
 </div>
+
+<div class="container" id="postOwnerProfile">
+    <h1><%= user.firstName%>'s POSTS</h1>
+    <% posts.forEach((post)=>{ %>
+        <div class="rows">
+            <div class="row">
+                <p><%= post.memory %></p>
+                <img id="userProfileImg" src="<%= post.img %>" alt=""><br>
+                <i class="cd"><%=post.cdate%></i>
+             
+            </div>
+        </div>
+    <% }) %>
+    </div>
 
 <%- include('../../partials/footer') %>
 

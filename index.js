@@ -161,16 +161,21 @@ app.put('/update/:id', (req,res)=>{
 app.delete('/delete/:postId', (req,res)=>{
     const { postId } = req.params; // Extract the post ID from the request
 // custom delete posts 
-for (let index in posts) {
-    console.log("postId:", postId, "posts IDs:", posts.map(u => u.id));
-  if (posts[index].id === postId) { // Compare rId as string
-    const deletedPost = posts.splice(index, 1); // Remove the post
+    const foundPost = posts.find((post)=> post.id === postId)
+    console.log("postid " +postId + " and deleting post " + JSON.stringify(foundPost))
+    if(!foundPost){
+        return res.send('post not found !')
+    }
+    console.log(posts.indexOf(foundPost))
+    const postIndex = posts.indexOf(foundPost)
+    const i = posts[postIndex]
+    if(i !== -1){
+      posts = posts.splice(i, 1)
+    console.log('post successfully deleted !')
+    }
+    console.log(JSON.stringify(posts))
     res.redirect('/')
-  }
-}
-  return res.status(404).json({ message: "Post not found" }); // If no match found
-     
-    
+  
 })
 
 
@@ -277,9 +282,6 @@ app.get('/postOwnerProfile/:id', (req,res)=>{
 // post likes
 app.post('/posts/:id/like', (req,res)=>{
     const postId = req.params.id
-
-    
-
     const loggedInUser = users.find((user)=>user.userId === req.session.userId)
     if(!loggedInUser){
         console.log('please log in and like!')

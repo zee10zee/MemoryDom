@@ -1,8 +1,25 @@
 
 
-.likesCommentsShares,.likesCmntShareCount{
+.likesCmntShareCount, .buttonHandles{
   display: flex;
   justify-content: space-between;
+}
+
+.notifications{
+  width: 600px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+.notifications img{
+  width: 100%;
+    margin: 0 auto;
+}
+
+
+
+#commentingArea{
+  display: none;
 }
 
 body{
@@ -20,6 +37,66 @@ body{
   z-index: 1;
 }
 
+.details{
+  margin-bottom: 50px;
+}
+.postInfo .memory{
+  width: 90%;
+  margin-right: auto;
+  margin-top: auto;
+}
+
+#memoryAndIcon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: auto;
+}
+#memoryAndIcon .fa-solid{
+  width: 20px;
+  height: 20px;
+}
+.postInfo .settingIcon{
+  width: 20%;
+  margin-left: auto;
+  text-align: end;
+  font-size: 20px;
+}
+.settingIcon::before {
+  font-family: "Font Awesome 6 Free"; /* Required! */
+  content: "\F3E4"; /* Unicode for trash icon */
+  font-weight: 900; /* Solid icons need this */
+  margin-right: 8px;
+}
+.editAndDeleteBtn{
+  display: none;
+  flex-direction: column;
+  width: 10%;
+  justify-content: end;
+  align-items: end;
+  background-color: beige;
+  margin: 4px;
+  margin-left: auto;
+}
+
+ .editPostBtn, #deletePostForm #deletePostBtn{
+  width : 100%;
+  text-align: end;
+}
+
+.editPostBtn, #deletePostForm, #deletePostBtn:hover{
+  cursor: pointer;
+  color: darkslateblue;
+}
+
+/* addd button */
+.newBtnContainer{
+  position: fixed;
+  top : 70px;
+  left: 11%;
+}
+
 
 .container.signUpForm{
   margin-top: 100px !important;
@@ -35,25 +112,123 @@ body{
   background-color: blue;
 }
 
-.showPostContainer .showPostImg{
-  width: 450px !important;
-  height: 300px !important;
+
+.showPostMemory{
+  background-color:rgb(247, 245, 241);
+  padding: 5px;
+}
+#postOwnerProfile .rows, #showPosts .row{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-#userProfile, #signUpForm, #activeUserProfile, #showPosts, #addPost, #loginForm{
+.card-img-top{
+  height: 350px;
+}
+
+#userProfile, #signUpForm, #postOwnerProfile, #showPosts, #addPost, #loginForm, #editPostForm{
   margin-top: 100px !important; 
 }
 
- #loginForm, #signUpForm{
-  width: 550px !important;
+ #loginForm,#editPostForm, #signUpForm,#addPost, #showPosts img, #userProfile img{
+  /* width: 550px !important; */
+  width: 50%;
   margin: 0 auto;
 }
 
+#userProfile{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
 
+/* [psts] */
+
+.postInfo{
+  width: 700px;
+  margin: 100px auto;
+
+}
+
+#createNewBtn{
+  /* background-origin: blue !important; */
+  background-color: rgb(7, 133, 7);
+  padding: 6px 10px;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+}
 
 @media screen and (max-width : 1010px) {
-  #addPost, #loginForm{
-    width: 400px;
+ 
+  .postInfo{
+    width:100%;
+    margin: 100px auto;
+  }
+
+  #loginForm, #signUpForm{
+    width: 100% !important;
+    margin: 0 auto;
   }
   
+}
+
+@media screen and (max-width : 700px) {
+  /* addd button */
+.newBtnContainer{
+  position: fixed;
+  bottom: 0;
+  top: auto;
+  left: auto;
+  width: 100%;
+  padding: 0;
+}
+.notifications{
+  width: 100%;
+  /* margin: ; */
+}
+
+#createNewBtn{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 5px;
+  font-size: 20px;
+}
+#createNewBtn i{
+  margin-left: 7px;
+  font-size: 30px;
+}
+#postImg, #userProfileImg, #editPostForm{
+  width: 100% !important;
+  margin: 0 auto;
+}
+/* #loginForm, #editPostForm, #signUpForm, */
+ #addPost{ 
+ /* #showPosts img, #userProfile img { */
+  width: 100%;
+  margin: 0 auto;
+}
+.editAndDeleteBtn{
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  justify-content: end;
+  align-items: end;
+  background-color: beige;
+  margin: 4px;
+  margin-left: auto;
+}
+#userProfile{
+ width: 100%;
+ margin: 0 auto;
+}
+.navbar-nav .user-profile .logoutProfile{
+  background: darkorange !important;
+  font-size: 20px;
+  margin: 4px auto;
+}
 }
