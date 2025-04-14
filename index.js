@@ -31,6 +31,8 @@ app.use((req, res, next) => {
     next();
 });
 
+// alert message
+
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
 app.use(express.static('public'));
@@ -46,10 +48,23 @@ app.get('/', (req,res)=>{
         const user = users.find((user)=> user.userId === post.userid);
          return Object.assign({}, post, { user});
     })
+
+    const msg = req.session.welcomeMessage
+    const welcomeBackMsg = req.session.welcomeBack
+    const goodbyeMsg = req.session.goodBye
+    
+    delete req.session.welcomeMessage
+    delete req.session.welcomeBack
+    res.clearCookie('goodbye')
     postsAndusersInfo.sort().reverse();
-       res.render('index.ejs', {posts : postsAndusersInfo})
-       
-       
+       res.render('index.ejs', 
+        {
+            posts : postsAndusersInfo, 
+            message : msg,
+            welcomeBackMsg : welcomeBackMsg,
+            goodbyeMsg : goodbyeMsg
+
+        })
 })
 
 
@@ -182,8 +197,10 @@ app.delete('/delete/:postId', (req,res)=>{
 // USERS & USER LOGIN ROUTES
 
 app.get('/users/signup', (req,res)=>{
-    if(req.session)
-    res.render('users/sign-up.ejs')
+    const userExist = req.session.userExistMsg
+
+    delete req.session.userExistMsg
+    res.render('users/sign-up.ejs', {userExistMsg : userExist})
 })
 
 app.post('/users/signup', (req,res)=>{
@@ -197,18 +214,24 @@ app.post('/users/signup', (req,res)=>{
     }
 
     // getting the current user
-    const existingUser = users.find((user) => user.firstName === newUser.firstName)
+    const existingUser = users.find((user) => user.email === newUser.email)
+    if(existingUser){
+       req.session.userExistMsg = `Email is already registered !`
+       return res.redirect('/users/signup')
+    }
 
     users.push(newUser)
     // creates a session with an id for new user signed in
     req.session.userId = newUser.userId
+    req.session.welcomeMessage = `welcome ${newUser.firstName} to my app`
     console.log("Welcome " + newUser.firstName + " to MemoryDom App")
     res.redirect('/')
 })
 
 // login form
 app.get('/login', (req,res)=>{
-    res.render('users/login.ejs')
+    const signUpMsg = req.session.signUpMessage
+    res.render('users/login.ejs', {signUpMsg : signUpMsg})
 })
 
 app.post('/user/login', (req,res)=>{
@@ -217,11 +240,13 @@ app.post('/user/login', (req,res)=>{
    const existingUser = users.find((user)=> user.email === email && user.password === password)
       if(existingUser){
         req.session.userId = existingUser.userId
+        req.session.welcomeBack = `welcome back ! ${existingUser.firstName}`
         res.redirect('/')
-        return console.log('welcome back ! mr : ', existingUser.firstName)
+        console.log('welcome back ! mr : ', existingUser.firstName)
       }else{
+         req.session.signUpMessage = `Please sign up first !`
          console.log('please sign up first')
-         res.redirect('/users/signup')
+         res.redirect('/login')
       }
 })
 
@@ -229,12 +254,19 @@ app.post('/user/login', (req,res)=>{
 // log out route
 
 app.get('/logout', (req,res)=>{
+    const user = users.find((u)=> u.userId === req.session.userId)
+let goodByeMsg = ''
+    if(user){
+        goodByeMsg = `see you again ${user.firstName}`
+       
+    }
     req.session.destroy((err)=>{
         if(err){
             return res.send(res.json({message : "destruction problem"})).status()
         }
-        console.log('user logged out successfully !')
+        res.cookie('goodbye', goodByeMsg, {maxAge : 3000})
         res.redirect('/')
+        console.log('user logged out successfully !')
     })
 })
 

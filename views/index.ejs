@@ -1,6 +1,30 @@
 <%- include('../partials/header') %>
       
      <div class="postInfo container">
+        <% if(message) {%>
+            <h3 class="welcom alert alert-success" id="welcome"><%= message%></h3>
+         <%  }else if(welcomeBackMsg){ %>
+            <h3 id="welcomeBack" class="alert alert-success">
+                <%= welcomeBackMsg %>
+            </h3>
+          <% } %>
+
+           <%if(locals.goodbyeMsg){ %>
+                <h3 id="goodbye" class="alert alert-primary"><%=goodbyeMsg %></h3>
+           <%} %>
+        <script>
+            setTimeout(() => {
+             const welcome = document.getElementById('welcome')
+             const welcomeBack = document.getElementById('welcomeBack')
+             const goodbye = document.getElementById('goodbye')
+             if(welcome) welcome.style.display = "none"
+             if(welcomeBack) welcomeBack.style.display = "none"
+            //  if(goodbye) goodbye.style.display = "none"
+             
+             
+            }, 3000);
+          
+        </script>
         <h1>THE POSTS !</h1>
         <div class="row my-3">
              

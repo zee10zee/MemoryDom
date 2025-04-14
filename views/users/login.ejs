@@ -1,5 +1,13 @@
 <%- include('../../partials/header') %>
 <div class="container mx-auto" id="loginForm">
+   <% if(signUpMsg){ %>
+      <h3 id="shouldSignUp" class="alert alert-danger"> <%= signUpMsg %></h3>
+      <% } %>
+      <script>
+         setTimeout(() => {
+            document.getElementById('shouldSignUp').style.display = "none"            
+         }, 3000);
+      </script>
     <h1>USER login</h1>
     <form action="/user/login" method="post">
      

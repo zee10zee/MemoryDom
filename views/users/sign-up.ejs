@@ -1,5 +1,15 @@
 <%- include('../../partials/header') %>
 <div class="container  mx-auto" id="signUpForm" >
+    <% if(userExistMsg){ %>
+        <h3 id="userExist" class="alert alert-danger"> <%= userExistMsg %></h3>
+        <script>
+            setTimeout(() => {
+               const existUser = document.getElementById('userExist')
+               if(existUser) existUser.style.display = "none"
+            }, 3000);
+         </script>
+        <% } %>
+     
     <h1>USER SIGN UP </h1>
     <form action="/users/signup" method="post">
         <div class="form-group mb-3">

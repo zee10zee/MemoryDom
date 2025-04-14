@@ -8,7 +8,10 @@ const comment = document.getElementById('comment')
 
 popCommentBtn.addEventListener('click', (e)=>checkCommentArea(e))
 
-commitForm.addEventListener('submit', (e)=>checkCommentArea())
+commitForm.addEventListener('submit', (e)=>{
+    checkCommentArea()
+    alert()
+})
 let isOpen = false;
 function checkCommentArea(e){
     e.preventDefault()
@@ -24,9 +27,4 @@ console.log(isOpen)
 }
 const icon = document.querySelector('.settingIcon')
 const editDeleteBtn = document.querySelector('.editAndDeleteBtn')
-
-console.log(icon, editDeleteBtn)
-icon.addEventListener('click',(e)=>{
-    
-})
 
