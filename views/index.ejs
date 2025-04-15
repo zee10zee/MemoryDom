@@ -1,5 +1,6 @@
 <%- include('../partials/header') %>
-      
+
+
      <div class="postInfo container">
         <% if(message) {%>
             <h3 class="welcom alert alert-success" id="welcome"><%= message%></h3>
@@ -8,10 +9,6 @@
                 <%= welcomeBackMsg %>
             </h3>
           <% } %>
-
-           <%if(locals.goodbyeMsg){ %>
-                <h3 id="goodbye" class="alert alert-primary"><%=goodbyeMsg %></h3>
-           <%} %>
         <script>
             setTimeout(() => {
              const welcome = document.getElementById('welcome')
@@ -25,9 +22,18 @@
             }, 3000);
           
         </script>
+         <%if(goodbyeMsg){ %>
+            <h3 id="goodbye" class="alert alert-primary"><%=goodbyeMsg %></h3>
+            <script>
+                setTimeout(() => {
+                 const goodbye = document.getElementById('goodbye')
+                 if(goodbye) goodbye.style.display = "none"
+                }, 3000);
+              
+            </script>
+       <%} %>
         <h1>THE POSTS !</h1>
         <div class="row my-3">
-             
         <% posts.forEach((post, i )=>{%>
           
             <div class="col-12-lg col-6-md  details">
@@ -97,48 +103,37 @@
 
             <div class="display-comments container border rounded my-3 py-2">
                 <h3>Comments !</h3>
-                <ul>
+                <ul id="commentList">
                     <% post.comments.forEach((comment, i)=>{ %>
-                        <li class="d-flex" id="comment-<%=comment.comment_Id%>">
-                            <p><strong><%= comment.author%></strong>:   </p><p class="commentText mx-2"><%= comment.comment %></p>
+                        <li class="d-flex liComment" data-id="<%=comment.comment_Id%>">
+                            <p><strong><%= comment.author%></strong>: </p>
+                            <p  class="commentTextt mx-2" id="commentText"><%= comment.comment %></p>
+                            <% if(loggedInUser.userId === comment.commenterId){ %>
+                                <% console.log(JSON.stringify(loggedInUser.firstName)) %>
                             <div class="edit-delete d-flex justify-content-between px-3">
-                                <form action="" method="get"  class="editButton mx-2">
-                                    <a class="btn btn-success btn-sm editButton" data-toggle="modal" data-target = "#EditCommentModal"  data-comment-id = "<%=comment.comment_Id%>">Edit</a>
-                                </form>
-                                  <!-- modal start -->
-                       <div class="modal fade" id="EditCommentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Edit Comment</h5>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                <div class="form-group">
-                                    <label for="comment" class="col-form-label">new comment</label>
-                                    <input type="hidden" id="commentId" name="commentId" value = "<%=comment.comment_Id%>">
-                                    <input type="text" class="form-control" name="commentInput" id="commentInput"  value="<%=comment.comment%>">
-                                </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <form  action="/comment/update" method="post">
-                                    <button type="submit" class="btn btn-primary updatedButton" id="updateButton">update</button>
-                                </form>
-                            </div>
-                         </div>
-                        </div>
-                    </div>
-                        <!-- modal ends -->
+
+                                    <button class="btn btn-success btn-sm editButton" id="editCommitBtn">Edit</button>
+                                
+                                <!-- delete form -->
                                 <form action="/comment/<%=comment.comment_Id%>/delete" method="post" class="mx-2">
                                     <button type="submit" class="btn btn-danger btn-sm">delete</button>
                                 </form>
                             </div>
+                            <% } %>
                         </li>
-                     
                     <% }) %>
                 </ul>
+                 <!-- modal -->
+                 <form id="formModal" name="modalForm">
+                    <div class="form-group">
+                        <input class="form-control" name="modalInput" class="inputModal" required id="modalEditComment" placeholder="New Comment">
+                    </div>
+                    <div class="form-group mt-2">
+                        <button id="saveComment" class="form-control btn btn-success btn-sm">Save</button>
+                        <button id="cancelCommentModal" class="cancelModal form-control btn btn-alert btn-sm" onclick="openCloseModal(event)">cancel</button>
+                    </div>
+                   
+                </form> 
             </div>
             </div>
         <% }) %>

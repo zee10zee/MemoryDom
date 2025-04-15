@@ -4,6 +4,7 @@ import bodyParser from "body-parser"
 import { v4 as uuidv4 } from 'uuid';
 import methodOverride from 'method-override'
 import session from "express-session"
+import cookieParser from "cookie-parser";
 
 const port = process.env.PORT || 3000;
 
@@ -36,6 +37,9 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
 app.use(express.static('public'));
+app.use(cookieParser())
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
 
 
@@ -51,7 +55,7 @@ app.get('/', (req,res)=>{
 
     const msg = req.session.welcomeMessage
     const welcomeBackMsg = req.session.welcomeBack
-    const goodbyeMsg = req.session.goodBye
+    const goodbyeMsg = req.session.goodbye
     
     delete req.session.welcomeMessage
     delete req.session.welcomeBack
@@ -370,13 +374,17 @@ app.post('/posts/:id/comment', (req,res)=>{
     }
 
     const post = posts.find((post)=> post.id === postId)
-    const commentContent = {comment_Id : uuidv4(), comment :newComment, author : loggedInUser.firstName, commenterId : loggedInUser.userId}
+    const commentContent = {
+        comment_Id : uuidv4(), 
+        comment :newComment, 
+        author : loggedInUser.firstName, 
+        commenterId : loggedInUser.userId}
    
-    if(post.userid === loggedInUser.userId){
+    if(post?.userid && loggedInUser?.userId && post.userid === loggedInUser.userId){
         console.log('same user ')
         commentContent.author = 'me'
     }
- 
+
     post.comments.push(commentContent)
     console.log(JSON.stringify(post, null, 2))
 
@@ -392,11 +400,36 @@ app.post('/posts/:id/comment', (req,res)=>{
 })
 
 // edit a comment
+app.get('/api/comments',(req,res)=>{
+    res.json(posts)
+} )
 
 
-app.post('/comment/update', (req,res)=>{
-    const updateInput = req.body["commentInput"];
-    console.log(updateInput)
+app.patch('/api/comment/:id/update', (req,res)=>{
+    const {id} = req.params;
+    const modalInput = req.body["modalInput"]
+    let commentFound = false;
+    // steps to update a comment
+    // 1. if the current user is the creator of the comment
+    const loggdInUser = users.find((u) => u.userId === req.session.userId)
+    if(!loggdInUser){
+        return res.send('please log in first !')
+    }
+
+    //2 if the user is the owner of the comment
+     posts.forEach((post)=>{
+        post.comments.forEach((comment)=>{
+            if(comment.comment_Id === id && comment.author === loggdInUser.firstName){
+                comment.comment = modalInput
+                commentFound = true;
+            }
+        })
+    })
+    if(commentFound){
+        console.log('comment successfully updated !' + modalInput)
+        res.json({newComment : modalInput})
+        console.log(JSON.stringify(posts, null, 2))
+    }
 })
 
 

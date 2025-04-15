@@ -1,8 +1,6 @@
 <%- include('../partials/header') %>
-<div class="container mx-auto w-25 " id="editPostForm">
-
-  
-    <h1>Edit Blog   <%=post.id%></h1>
+<div class="container mx-auto  " id="editPostForm">
+    <h1>Edit Blog   <%=post.id.substring(0,10) %></h1>
    
     <form method="POST" action="/update/<%= post.id%>?_method=PUT">
        <div class="form-group mb-3">

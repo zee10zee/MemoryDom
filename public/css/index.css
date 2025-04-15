@@ -124,6 +124,10 @@ body{
   text-align: center;
 }
 
+#formModal{
+  display: none;
+}
+
 .card-img-top{
   height: 350px;
 }
