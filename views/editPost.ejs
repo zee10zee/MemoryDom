@@ -2,12 +2,13 @@
 <div class="container mx-auto  " id="editPostForm">
     <h1>Edit Blog   <%=post.id.substring(0,10) %></h1>
    
-    <form method="POST" action="/update/<%= post.id%>?_method=PUT">
+    <form method="POST" action="/update/<%= post.id%>?_method=PUT" enctype="multipart/form-data">
        <div class="form-group mb-3">
         <textarea class="form-control rounded" rows="5" name="memory" id="memory" placeholder="any memory"><%= post.memory  %></textarea>
        </div>
        <div class="form-group mb-3">
-        <input class="form-control rounded" type="text" alt="image" id="img" name="img" placeholder="insert an image link" value="<%= post.img %>">
+        <label for="img">upload new image</label>
+        <input class="form-control rounded" type="file" alt="image" id="img" name="image">
        </div>
        <div class="form-group mb-3 d-flex justify-content-center">
         <input class="form-control rounded btn btn-success btn-sm" type="submit" value="Submit">

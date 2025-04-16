@@ -5,6 +5,14 @@ import { v4 as uuidv4 } from 'uuid';
 import methodOverride from 'method-override'
 import session from "express-session"
 import cookieParser from "cookie-parser";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+
+let __fileName = fileURLToPath(import.meta.url)
+let __dirname = path.dirname(__fileName)
+
 
 const port = process.env.PORT || 3000;
 
@@ -32,7 +40,34 @@ app.use((req, res, next) => {
     next();
 });
 
-// alert message
+// delete image middleware
+let deleteImage = (img)=>{
+    return (req,res, next) =>{
+        if(!img) return next();
+// unlike deletes the old file
+       const cleanImg = img.startsWith('/') ? img.slice(1) : img;
+       const fullPath = path.join(__dirname, 'public' + img)
+       fs.unlink(fullPath, err =>{
+          if(err){
+             return res.send('something is worong ' + err)
+          }
+
+            console.log('message deleted successfully !')
+           res.locals.imageDelete = `Image deleted successfully !`
+          next()
+       })
+    }        
+}
+
+const storage = multer.diskStorage({
+    destination : 'public/uploads/',
+    filename : (req,file, cb) =>{
+        // to rename the uploadedf file to avoid name conflict
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+
+const upload = multer({storage});
 
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
@@ -41,6 +76,10 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+const logUpload = (req,res, next)=>{
+    console.log('image uploading...')
+    next()
+}
 
 
 app.get('/', (req,res)=>{
@@ -55,6 +94,7 @@ app.get('/', (req,res)=>{
 
     const msg = req.session.welcomeMessage
     const welcomeBackMsg = req.session.welcomeBack
+    const deleteImgMsg = req.session.imageDelete
     const goodbyeMsg = req.session.goodbye
     
     delete req.session.welcomeMessage
@@ -66,7 +106,8 @@ app.get('/', (req,res)=>{
             posts : postsAndusersInfo, 
             message : msg,
             welcomeBackMsg : welcomeBackMsg,
-            goodbyeMsg : goodbyeMsg
+            goodbyeMsg : goodbyeMsg,
+            deleteImgMsg : deleteImgMsg
 
         })
 })
@@ -83,11 +124,11 @@ app.get('/new', (req,res)=>{
 });
 
 
-app.post('/new', (req,res)=>{
+app.post('/new', logUpload, upload.single('image'),(req,res)=>{
     const uInfo = {
         id : uuidv4(),
         memory : req.body.memory,
-        img : req.body.img,
+        img : '/uploads/'+ req.file.filename,
         cdate : `${newDate.getDate()},${newDate.getMonth() + 1},${newDate.getFullYear()}`,
         userid : req.session.userId,
         likes: [],
@@ -96,6 +137,7 @@ app.post('/new', (req,res)=>{
         shareContent : [],
         sharedBy : []
     }
+    console.log('/uploads/' + req.file.filename)
      posts.push(uInfo)
     res.redirect('/')
 })
@@ -147,13 +189,15 @@ app.get('/edit/:id',(req,res)=>{
 
 // })
 
-app.put('/update/:id', (req,res)=>{
+app.put('/update/:id',logUpload, upload.single('image'), (req,res)=>{
     // post id.. route id
     const {id} = req.params;
+    const oldImage = posts.find((post)=> post.id === id).img
+     deleteImage(oldImage)
     const updatedposts = {
         id : uuidv4(),
         memory : req.body.memory,
-        img : req.body.img,
+        img : '/uploads/' + req.file.filename,
         cdate : new Date().toISOString().split('T')[0],
         userid : req.session.userId,
         likes: [],
@@ -177,24 +221,26 @@ app.put('/update/:id', (req,res)=>{
 
 // delete route
 
-app.delete('/delete/:postId', (req,res)=>{
+app.delete('/delete/:postId',(req,res)=>{
     const { postId } = req.params; // Extract the post ID from the request
 // custom delete posts 
     const foundPost = posts.find((post)=> post.id === postId)
     console.log("postid " +postId + " and deleting post " + JSON.stringify(foundPost))
     if(!foundPost){
-        return res.send('post not found !')
+        return res.send(' no post found !')
     }
     console.log(posts.indexOf(foundPost))
-    const postIndex = posts.indexOf(foundPost)
-    const i = posts[postIndex]
-    if(i !== -1){
-      posts = posts.splice(i, 1)
+
+    const index = posts.indexOf(foundPost)
+    const postIndex = posts[index]
+
+    if(postIndex !== -1){
+     deleteImage(foundPost.img)
+    posts.splice(index, 1)
     console.log('post successfully deleted !')
     }
     console.log(JSON.stringify(posts))
     res.redirect('/')
-  
 })
 
 
@@ -207,7 +253,7 @@ app.get('/users/signup', (req,res)=>{
     res.render('users/sign-up.ejs', {userExistMsg : userExist})
 })
 
-app.post('/users/signup', (req,res)=>{
+app.post('/users/signup', logUpload, upload.single('image'),(req,res)=>{
 
     const newUser = {
         userId : uuidv4(),
@@ -215,6 +261,7 @@ app.post('/users/signup', (req,res)=>{
         lastName :  req.body.lname,
         email :     req.body.email,
         password :  req.body.password,
+        avatar : '/uploads/' + req.file.filename,
     }
 
     // getting the current user
@@ -336,12 +383,14 @@ app.post('/posts/:id/like', (req,res)=>{
     if(post.likes.includes(loggedInUser.userId)){
         console.log('you have already has liked the post')
         // until we alert user the bottom
-        return res.send('you have already has liked the post')
+        post.likes = post.likes.filter((userId) => userId !== loggedInUser.userId)
+        post.countLikes =  post.countLikes - 1;
+    }else{
+        const liker = post.likes.push(loggedInUser.userId)
+        post.countLikes += 1    
     }
     
-    const liker = post.likes.push(loggedInUser.userId)
-    post.countLikes =+ 1
-
+    
 //  send notification except the owner liking
     if(post.userid !== loggedInUser.userId){
         // function call
@@ -404,10 +453,12 @@ app.get('/api/comments',(req,res)=>{
     res.json(posts)
 } )
 
+// UPDATE COMMNET
 
-app.patch('/api/comment/:id/update', (req,res)=>{
+app.patch('/comment/:id/update', (req,res)=>{
+    // /api/comment/27557dca-2287-427d-ac84-fedb09ae3513/update
     const {id} = req.params;
-    const modalInput = req.body["modalInput"]
+    const modalInput = req.body.modalEditComment;
     let commentFound = false;
     // steps to update a comment
     // 1. if the current user is the creator of the comment
@@ -416,20 +467,47 @@ app.patch('/api/comment/:id/update', (req,res)=>{
         return res.send('please log in first !')
     }
 
+    let postcomment = {}
     //2 if the user is the owner of the comment
-     posts.forEach((post)=>{
-        post.comments.forEach((comment)=>{
-            if(comment.comment_Id === id && comment.author === loggdInUser.firstName){
-                comment.comment = modalInput
-                commentFound = true;
-            }
-        })
+    posts.forEach((p)=>{
+       const post = p.comments.find((c) => c.comment_Id === id)
+       if(post){
+        console.log(modalInput) 
+        // post.comment = modalInput
+
+       }
     })
-    if(commentFound){
-        console.log('comment successfully updated !' + modalInput)
-        res.json({newComment : modalInput})
-        console.log(JSON.stringify(posts, null, 2))
+})
+
+
+// delete a comment
+
+app.delete('/comment/:id/delete', (req,res)=>{
+    const {id}  = req.params
+
+  let commentDeleted = false;
+    let commentLength = null;
+    const loggedInUser = req.session.userId;
+    if(!loggedInUser){
+        return res.send('please log in first !')
     }
+
+    posts.forEach((post)=>{
+        commentLength = post.comments.length;
+        let comment = post.comments.find((comment)=> comment.comment_Id === id)
+        if(comment){
+         post.comments =  post.comments.filter((comment)=> comment.comment_Id !== id)
+        }
+
+        if(post.comments < commentLength){
+            commentDeleted = true;
+        }
+    })
+
+    if(commentDeleted){
+        console.log('comment successfully deleted ')
+    }
+    res.redirect('/')
 })
 
 
@@ -542,30 +620,28 @@ var users = [
 ]
 
 var posts = [
-        {
-        id : uuidv4(), 
-        memory : 'once upon a time when i had a step mother !',
-        cdate : `${newDate.getDate()},${newDate.getMonth() + 1},${newDate.getFullYear()}`,
-        img : 'https://plus.unsplash.com/premium_photo-1661963682167-0976167be2a7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGFkdmVudHVyZW91c3xlbnwwfHwwfHx8MA%3D%3D',
-        userid : users[0].userId,
-        likes: [],
-        countLikes :0,
-        comments : [],
-        shareContent : [],
-        sharedBy : []
-        },
-        {
-        id : uuidv4(),
-        memory : 'whenever you smile i smile',
-        cdate : `${newDate.getDate()},${newDate.getMonth() + 1},${newDate.getFullYear()}`,
-        img : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9xwBzc7LSpyLEj1ea0gkpLCUpVWtCp48NLA&s',
-        userid : users[1].userId,
-        likes: [],
-        countLikes :0,
-        comments : [],
-        shareContent : [],
-        sharedBy : []
-        }
+        // {
+        // id : uuidv4(), 
+        // memory : 'once upon a time when i had a step mother !',
+        // cdate : `${newDate.getDate()},${newDate.getMonth() + 1},${newDate.getFullYear()}`,
+        // img : '/uploads/images/ejsImage.jpg',
+        // likes: [],
+        // countLikes :0,
+        // comments : [],
+        // shareContent : [],
+        // sharedBy : []
+        // },
+        // {
+        // id : uuidv4(),
+        // memory : 'whenever you smile i smile',
+        // cdate : `${newDate.getDate()},${newDate.getMonth() + 1},${newDate.getFullYear()}`,
+        // img : '/uploads/images/ejsImage.jpg',
+        // likes: [],
+        // countLikes :0,
+        // comments : [],
+        // shareContent : [],
+        // sharedBy : []
+        // }
     ]
 
 

@@ -8,17 +8,20 @@
             <h3 id="welcomeBack" class="alert alert-success">
                 <%= welcomeBackMsg %>
             </h3>
-          <% } %>
+          <% }else if(deleteImgMsg){%>
+            <h3 id="deleteImg" class="alert alert-success">
+                <%= deleteImgMsg %>
+            </h3>
+           <%} %>
         <script>
             setTimeout(() => {
              const welcome = document.getElementById('welcome')
              const welcomeBack = document.getElementById('welcomeBack')
+             const delImg = document.getElementById('deleteImg')
              const goodbye = document.getElementById('goodbye')
              if(welcome) welcome.style.display = "none"
              if(welcomeBack) welcomeBack.style.display = "none"
-            //  if(goodbye) goodbye.style.display = "none"
-             
-             
+             if(delImg) delImg.style.display = "none"             
             }, 3000);
           
         </script>
@@ -32,6 +35,7 @@
               
             </script>
        <%} %>
+       <% if(posts.length){ %>
         <h1>THE POSTS !</h1>
         <div class="row my-3">
         <% posts.forEach((post, i )=>{%>
@@ -51,8 +55,8 @@
                 </form>
                 <% } %>
             </div>
-                
-              <img class="card-img-top img-thumbnail img-fluid mx-auto" src="<%=post.img%>" alt="Card IMG TOP">
+                <%= console.log(post.img) %>
+              <img src="<%=post.img%>" class="card-img-top img-thumbnail img-fluid mx-auto" alt="Card IMG TOP">
                <div class="card-body">
                 <i class="currentDate"> <%= post.cdate %></i>
                  <i class="createdBy">createdBy :<a href="/postOwnerProfile/<%= post.userid %>">
@@ -65,7 +69,14 @@
                 <% if(loggedInUser){ %>
                     <div class="like">
                         <form action="/posts/<%=post.id%>/like" method="post">
-                            <button class="btn btn-success btn-sm" type="submit">Like</button>
+                            <% console.log(post.countLikes) %>
+                            <%if(post.likes.includes(loggedInUser.userId)){ %>
+                                <button id="likeButton" class=" likeBtn btn btn-success btn-sm" type="submit">Liked</button>
+                                <%}else{ %>
+                                <button class="likeBtn btn btn-secondary btn-sm" type="submit">Like</button>
+                                <%} %>
+                                
+                           
                         </form>
                     </div>
                     <div class="div">
@@ -95,10 +106,10 @@
             </div>
             <div class="likesCmntShareCount">
                 <div class="likes">
-                    <p class="px-3"><strong class="likesCount"><%= post.likes.length%></strong>Likes</p>
+                    <p class="px-3"><strong class="likesCount"><%= post.likes.length%> </strong>Likes</p>
                 </div>
                 <div class="cmnts"><strong><%= post.comments.length%></strong> comments </div>
-                <div class="shares"><%= post.shareContent.length%> shares</div>
+                <div class="shares"><strong><%= post.shareContent.length%></strong> shares</div>
             </div>
 
             <div class="display-comments container border rounded my-3 py-2">
@@ -108,15 +119,17 @@
                         <li class="d-flex liComment" data-id="<%=comment.comment_Id%>">
                             <p><strong><%= comment.author%></strong>: </p>
                             <p  class="commentTextt mx-2" id="commentText"><%= comment.comment %></p>
-                            <% if(loggedInUser.userId === comment.commenterId){ %>
-                                <% console.log(JSON.stringify(loggedInUser.firstName)) %>
+                            <% if(loggedInUser && loggedInUser.userId === comment.commenterId){ %>
+                                <% console.log(JSON.stringify("logged in user from ejs " + loggedInUser)) %>
                             <div class="edit-delete d-flex justify-content-between px-3">
 
+                                 <form method="POST" action="/comment/<%= comment.comment_Id%>/update?_method=PATCH" class="form">
                                     <button class="btn btn-success btn-sm editButton" id="editCommitBtn">Edit</button>
+                                 </form>
                                 
                                 <!-- delete form -->
-                                <form action="/comment/<%=comment.comment_Id%>/delete" method="post" class="mx-2">
-                                    <button type="submit" class="btn btn-danger btn-sm">delete</button>
+                                <form method="POST" action="/comment/<%=comment.comment_Id%>/delete?_method=DELETE" class="mx-2">
+                                    <button type="submit" name="deleteButton" id="deleteBtn" class="btn btn-danger btn-sm">delete</button>
                                 </form>
                             </div>
                             <% } %>
@@ -124,7 +137,7 @@
                     <% }) %>
                 </ul>
                  <!-- modal -->
-                 <form id="formModal" name="modalForm">
+                 <form id="formModal" name="modalForm" style="display: block;">
                     <div class="form-group">
                         <input class="form-control" name="modalInput" class="inputModal" required id="modalEditComment" placeholder="New Comment">
                     </div>
@@ -137,6 +150,11 @@
             </div>
             </div>
         <% }) %>
+        <% }else{ %>
+            <h3>No POST ! Let it be started by you !
+                <a href="/new">Post a memory !</a>
+            </h3>
+        <% } %>
             <!-- modal -->
            
             <!-- end of modal -->

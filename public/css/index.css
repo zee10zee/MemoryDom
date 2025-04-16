@@ -16,6 +16,20 @@
     margin: 0 auto;
 }
 
+#cameraBtn{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+#avatar{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+#cameraBtn:hover{
+  cursor: pointer;
+}
 
 
 #commentingArea{

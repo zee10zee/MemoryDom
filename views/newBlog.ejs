@@ -1,12 +1,13 @@
 <%- include('../partials/header') %>
 <div class="container" id="addPost">
     <h1>Create NEW Memory </h1>
-    <form action="/new" method="post">
+    <form action="/new" method="POST" enctype="multipart/form-data">
        <div class="form-group mb-3">
         <textarea class="form-control rounded" rows="5" name="memory" id="memory" placeholder="any memory"></textarea>
        </div>
        <div class="form-group mb-3">
-        <input class="form-control rounded" type="text" alt="image" id="img" name="img" placeholder="insert an image link">
+        <input class="form-control rounded" type="file" alt="image" id="img" name="image" placeholder="insert an image link">
+        <!-- <input class="form-control rounded" type="text" alt="image" id="img" name="img" placeholder="insert an image link"> -->
        </div>
        <div class="form-group mb-3 d-flex justify-content-center">
         <input class="form-control rounded btn btn-success btn-sm" type="submit" value="Submit">
