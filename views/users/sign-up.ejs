@@ -13,9 +13,12 @@
     <h1>USER SIGN UP </h1>
     <form action="/users/signup" method="post" enctype="multipart/form-data">
    
-        <div class="form-group mb-3 d-flex ">
-            <input class="form-control w-75 rounded" type="text" name="fname" id="fname" placeholder="your name">
-            <div class="div mx-2">
+        <div class="form-group mb-3 d-flex align-items-center ">
+            <div class="form-group " style="width: 80%;">
+                <input class="form-control rounded" type="text" name="fname" id="fname" placeholder="your name">
+            </div>
+         
+            <div class="div mx-2 ml-auto" style="width: 20%;">
                 <label for="cameraBtn"> Profile pic</label>
                 <img src="https://images.unsplash.com/photo-1560217930-ed5820aea22a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="cameraBtn ms-auto" id="cameraBtn">
            </div>
