@@ -1,53 +1,58 @@
 
-// public/app.js or inline in your HTML
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then(() => console.log("Service Worker Registered"));
-  }
+document.addEventListener('DOMContentLoaded', ()=>{
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(() => console.log("Service Worker Registered"));
+    }
+
+    const inputImg = document.getElementById('signupImage')
+    const preview = document.getElementById('previewImage')
+   
+    inputImg.addEventListener('change',()=>{
+      handlePreviews(inputImg,preview)
+    });
+
+    
+
+    const handlePreviews = (listeningImg, previewImage)=>{
+     
+        const file = listeningImg.files[0];
+        if(file){
+          const reader = new FileReader();
+   
+          reader.onload = ()=>{
+             previewImage.src = reader.result;
+             previewImage.style.display = "block"
+          };
+   
+          reader.readAsDataURL(file)
+        }
+    }
+
+  //   inputImg.addEventListener('change', (e)=>{
+  //     const file = e.target.files[0]
+  //     if(file){
+  //       console.log('we have a file')
+  //       let reader = new FileReader()
+  //       reader.onload = ()=>{
+  //         preview.src = reader.result
+  //       }
   
-const popCommentBtn =  document.getElementById('commentPoperBtn')
-console.log(popCommentBtn)
-const commentArea = document.getElementById('commentingArea')
-const commitForm = document.getElementById('commentSubmitForm')
-const comment = document.getElementById('comment')
-let modalInput = document.getElementById('modalEditComment')
-const signupForm = document.getElementById('signUpForm')
-let commentId = '';
-let saveCommentBtn =  document.getElementById('saveComment')
-// const commentopenter = document.querySelector('.popCommentBtn')
+  //       reader.readAsDataURL(file);
+  //     }
+  //  })
 
-// avatar camera
-const camera = document.getElementById('cameraBtn')
-// 
-camera.addEventListener('click', (e)=>{
-    document.getElementById('img').click()
+
+      // avatar camera
+      const profilePicBtn = document.getElementById('previewImage')
+
+      profilePicBtn.addEventListener('click', (e)=>{
+          document.getElementById('signupImage').click()
+      })
 })
-window.addEventListener('DOMContentLoaded', () => {
-    popCommentBtn.addEventListener('click', (e)=>checkCommentArea(e));
-  });
 
 
-// commitForm.addEventListener('submit', (e)=>{
-//     checkCommentArea(e)
-// })
-// let isOpen = false;
-// function checkCommentArea(e){
-//     e.preventDefault()
-//  if(!isOpen){
-//     commentArea.style.display = "block"
-//     isOpen = true;
-// console.log(isOpen)
-
-//  }else{
-//     commentArea.style.display = "none"
-//     isOpen = false;
-//  }
-// }
-// if profilePic not selected
-
-
-
-const icon = document.querySelector('.settingIcon')
-const editDeleteBtn = document.querySelector('.editAndDeleteBtn')
-//----------------------------------------------------------------------
+ 
+ 
+  

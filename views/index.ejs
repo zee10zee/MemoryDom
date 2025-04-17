@@ -35,63 +35,64 @@
               
             </script>
        <%} %>
-        <h1>THE POSTS !</h1>
+        <h1>The Memories!</h1>
+        <% if(posts.length) {%>
         <div class="row my-3">
-        <% posts.forEach((post, i )=>{%>
-          
-            <div class="col-12-lg col-6-md  details">
-               <div id="memoryAndIcon">
-                <p class="memory"><%= post.memory.substr(0, 50) %> <a href="/show/<%= post.id %>">read More</a></p>
-                <% if(loggedInUser && loggedInUser.userId === post.userid){ %>
-                <span class="settingIcon"></span>
-                <% } %>
-               </div>
-               <div class="editAndDeleteBtn d-flex justify-content-evenly mt-1">
-                <% if(loggedInUser && loggedInUser.userId === post.userid){ %>
-                 <a href="/edit/<%= post.id %>" class="editPostBtn btn btn-sm">Edit</a>
-                 <form action="/delete/<%=post.id%>?_method=DELETE" method="post" id="deletePostForm">
-                    <button type="submit" class=" btn btn-sm" id="deletePostBtn">Delete</a>
-                </form>
-                <% } %>
-            </div>
-                <%= console.log(post.img) %>
-              <img src="<%=post.img%>" class="card-img-top img-thumbnail img-fluid mx-auto" alt="Card IMG TOP">
-               <div class="card-body">
-                <i class="currentDate"> <%= post.cdate %></i>
-                 <i class="createdBy">createdBy :<a href="/postOwnerProfile/<%= post.userid %>">
-                    <%= post.user.firstName %> <%= post.user.lastName %></a></i>
-                
-    
-               </div>
-               <div class=" container likesCommentsShares">
-               <div class="buttonHandles">
-                <% if(loggedInUser){ %>
-                    <div class="like">
-                        <form action="/posts/<%=post.id%>/like" method="post">
-                            <% console.log(post.countLikes) %>
-                            <%if(post.likes.includes(loggedInUser.userId)){ %>
-                                <button id="likeButton" class=" likeBtn btn btn-success btn-sm" type="submit">Liked</button>
-                                <%}else{ %>
-                                <button class="likeBtn btn btn-secondary btn-sm" type="submit">Like</button>
-                                <%} %>
-                                
-                           
-                        </form>
-                    </div>
-                    <div class="div">
-                        <button class="btn btn-info btn-sm popCommentBtn" id="commentPoperBtn">comment !</button>
-                    </div>
-                 
-                    <div class="share">
-                        <form action="/posts/<%= post.id %>/share" method="post">
-                            <button class="btn btn-primary btn-sm" type="submit">Share</button>
-                        </form>
-                    </div>
-               </div>
+            <% posts.forEach((post, i )=>{%>
+            
+                <div class="col-12-lg col-6-md  details">
+                <div id="memoryAndIcon">
+                    <p class="memory"><%= post.memory.substr(0, 50) %> <a href="/show/<%= post.id %>">read More</a></p>
+                    <% if(loggedInUser && loggedInUser.userId === post.userid){ %>
+                    <span class="settingIcon"></span>
+                    <% } %>
+                </div>
+                <div class="editAndDeleteBtn d-flex justify-content-evenly mt-1">
+                    <% if(loggedInUser && loggedInUser.userId === post.userid){ %>
+                    <a href="/edit/<%= post.id %>" class="editPostBtn btn btn-sm">Edit</a>
+                    <form action="/delete/<%=post.id%>?_method=DELETE" method="post" id="deletePostForm">
+                        <button type="submit" class=" btn btn-sm" id="deletePostBtn">Delete</a>
+                    </form>
+                    <% } %>
+                </div>
+                    <%= console.log(post.img) %>
+                <img src="<%=post.img%>" class="card-img-top img-thumbnail img-fluid mx-auto" alt="Card IMG TOP">
+                <div class="card-body">
+                    <i class="currentDate"> <%= post.cdate %></i>
+                    <i class="createdBy">createdBy :<a href="/postOwnerProfile/<%= post.userid %>">
+                        <%= post.user.firstName %> <%= post.user.lastName %></a></i>
+                    
+        
+                </div>
+                <div class=" container likesCommentsShares">
+                <div class="buttonHandles">
+                    <% if(loggedInUser){ %>
+                        <div class="like">
+                            <form action="/posts/<%=post.id%>/like" method="post">
+                                <% console.log(post.countLikes) %>
+                                <%if(post.likes.includes(loggedInUser.userId)){ %>
+                                    <button id="likeButton" class=" likeBtn btn btn-success btn-sm" type="submit">Liked</button>
+                                    <%}else{ %>
+                                    <button class="likeBtn btn btn-secondary btn-sm" type="submit">Like</button>
+                                    <%} %>
+                                    
+                            
+                            </form>
+                        </div>
+                        <div class="div">
+                            <button class="btn btn-info btn-sm popCommentBtn" id="commentPoperBtn">comment !</button>
+                        </div>
+                    
+                        <div class="share">
+                            <form action="/posts/<%= post.id %>/share" method="post">
+                                <button class="btn btn-primary btn-sm" type="submit">Share</button>
+                            </form>
+                        </div>
+                </div>
 
-                <!-- commeining area -->
-                
-                <% } %>
+                    <!-- commeining area -->
+                    
+               <% } %>
             </div>
             <div class="likesCmntShareCount">
                 <div class="likes">
@@ -104,6 +105,7 @@
             <div class="display-comments container border rounded my-3 py-2">
             
                 <h3>Comments !</h3>
+                <% if(loggedInUser){ %>
                 <div class="comment my-3" id="commentingArea">
                     <form action="/posts/<%=post.id%>/comment" method="post" id="commentSubmitForm">
                         <div class="form-group">
@@ -114,6 +116,7 @@
                         </div>
                        
                     </form>
+                    <% } %>
                 </div>
                 <ul id="commentList">
                     <% post.comments.forEach((comment, i)=>{ %>
@@ -151,15 +154,15 @@
             </div>
             </div>
         <% }) %>
-      
-            <!-- modal -->
-           
-            <!-- end of modal -->
     </div>
+    <% }else{ %>
+        <h2> No memories !!</h2>
+        <h5>Lets start by you adding ... <a href="/new">Add Memory</a></h5>
+    <%} %> %>
 
      <!-- sharedPost -->
      <div class="sharedPost container">
-        <h1>shared post</h1>
+        <!-- <h1>shared post</h1> -->
         <div class="row my-3">
             <% posts.forEach((post)=>{ %>
                 <% post.shareContent.forEach((sharedPost)=>{%>

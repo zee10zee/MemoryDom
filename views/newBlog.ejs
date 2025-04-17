@@ -5,11 +5,13 @@
        <div class="form-group mb-3">
         <textarea required class="form-control rounded" rows="5" name="memory" id="memory" placeholder="any memory"></textarea>
        </div>
-       <div class="form-group mb-3">
-        <input class="form-control rounded" required type="file" alt="image" id="img" name="image" placeholder="insert an image link">
-        <!-- <input class="form-control rounded" type="text" alt="image" id="img" name="img" placeholder="insert an image link"> -->
+       <div class="form-group mb-3" id="newPostFile">
+        <input type="file"  id="newPostInput" accept="image/*" class="form-control rounded" required alt="image"  name="image">
        </div>
-       <div class="form-group mb-3 d-flex justify-content-center">
+      <div class="form-group" id="newPostPreviewDiv" style="margin-bottom: 55px;">
+        <img  alt="preview image" id="newPostPreview">
+      </div>
+       <div class="form-group" >
         <input class="form-control rounded btn btn-success btn-sm" required type="submit" value="Submit">
        </div>
        
@@ -18,6 +20,22 @@
    
         
     </form>
-
-
     <%- include('../partials/footer') %>
+    <script>
+        
+    const newPostImg = document.getElementById('newPostInput')
+    const newPostPreview = document.getElementById('newPostPreview')
+        newPostImg.addEventListener('change', (e)=>{
+      const file = e.target.files[0]
+      if(file){
+        console.log('we have a file')
+        let reader = new FileReader()
+        reader.onload = ()=>{
+          newPostPreview.src = reader.result
+          newPostPreview.style.display = "block"
+        }
+  
+        reader.readAsDataURL(file);
+      }
+   })
+    </script>

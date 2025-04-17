@@ -16,7 +16,7 @@
     margin: 0 auto;
 }
 
-#cameraBtn{
+#previewImage{
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -27,7 +27,7 @@
   border-radius: 50%;
 }
 
-#cameraBtn:hover{
+#previewImage:hover{
   cursor: pointer;
 }
 
@@ -179,9 +179,34 @@ body{
   color: #fff;
   text-decoration: none;
 }
+#newPostFile{
+  width: 58%;
+  margin-right: auto;
+  /* margin-bottom: 50px; */
+
+}
+ #newPostPreviewDiv {
+  width: 40%;
+  margin-left: auto;
+  margin-top: -50px;
+}
+  
+#newPostPreview{
+  width: 100%;
+  display: none;
+  height: 200px;
+}
 
 @media screen and (max-width : 1010px) {
  
+  /* new post */
+  #newPostFile, #newPostPreviewDiv, #newPostPreview{
+    width: 100%;
+  }
+  #newPostPreviewDiv, #newPostPreview{
+    margin-top: 65px;
+    /* margin: 65px 10px auto; */
+  }
   .postInfo{
     width:100%;
     margin: 100px auto;

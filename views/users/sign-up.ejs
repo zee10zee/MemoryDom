@@ -13,32 +13,34 @@
     <h1>USER SIGN UP </h1>
     <form  id="signUpForm" action="/users/signup" method="post" enctype="multipart/form-data" >
    
-        <div class="form-group mb-3 d-flex align-items-center ">
-            <div class="form-group " style="width: 80%;">
-                <input class="form-control rounded" type="text" name="fname" id="fname" placeholder="your name">
+        <div class="form-group mb-3  ">
+            <div class="form-group " >
+                <input required class="form-control rounded" type="text" name="fname" id="fname" placeholder="your name">
             </div>
-         
-            <div class="div mx-2 ml-auto" style="width: 20%;">
-                <label for="cameraBtn"> Profile pic</label>
-                <img src="/images/profilePic.jpg" class="cameraBtn ms-auto" id="cameraBtn">
-           </div>
-        </div>
-            <input class="rounded" type="file" autofocus  name="image" id="img" required style="display: none; width: 0;">
+            <!-- hidden button -->
+         <div class="my-3 form-group">
+            <input class="rounded" type="file"  name="image" id="signupImage" required style="width: 40%; height: 40px; display: none;">
+         </div>
         
        <div class="form-group mb-3">
-        <input class="form-control rounded" type="text" name="lname" id="lname" placeholder="your last name">
+        <input required class="form-control rounded" type="text" name="lname" id="lname" placeholder="your last name">
        </div>
      
        <div class="form-group mb-3">
-        <input class="form-control rounded" autocomplete="on" type="email" alt="email" id="email" name="email" placeholder="type your email please !">
+        <input required class="form-control rounded" autocomplete="on" type="email" alt="email" id="email" name="email" placeholder="type your email please !">
        </div>
 
        <div class="form-group mb-3">
-        <input class="form-control rounded" type="password" autocomplete="off" alt="password" id="password" name="password" placeholder="type your password please !">
+        <input required class="form-control rounded" type="password" autocomplete="off" alt="password" id="password" name="password" placeholder="type your password please !">
        </div>
 
        <div class="form-group mb-3 d-flex justify-content-center">
         <input class="form-control rounded btn btn-success btn-sm" type="submit" value="Submit">
+       </div>
+
+       <div class="div mx-2 form-group">
+            <label for="cameraBtn"> Profile pic</label>
+            <img img src="/images/profilePic.jpg" class="preview" id="previewImage">
        </div>
   
     </form>
