@@ -1,4 +1,11 @@
 
+// public/app.js or inline in your HTML
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("/service-worker.js")
+      .then(() => console.log("Service Worker Registered"));
+  }
+  
 const popCommentBtn =  document.getElementById('commentPoperBtn')
 console.log(popCommentBtn)
 const commentArea = document.getElementById('commentingArea')
