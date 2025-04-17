@@ -4,14 +4,14 @@
    
     <form method="POST" action="/update/<%= post.id%>?_method=PUT" enctype="multipart/form-data">
        <div class="form-group mb-3">
-        <textarea class="form-control rounded" rows="5" name="memory" id="memory" placeholder="any memory"><%= post.memory  %></textarea>
+        <textarea required class="form-control rounded" rows="5" name="memory" id="memory" placeholder="any memory"><%= post.memory  %></textarea>
        </div>
        <div class="form-group mb-3">
         <label for="img">upload new image</label>
-        <input class="form-control rounded" type="file" alt="image" id="img" name="image">
+        <input required class="form-control rounded" type="file" alt="image" id="img" name="image">
        </div>
        <div class="form-group mb-3 d-flex justify-content-center">
-        <input class="form-control rounded btn btn-success btn-sm" type="submit" value="Submit">
+        <input required class="form-control rounded btn btn-success btn-sm" type="submit" value="Submit">
        </div>
         
 </div>

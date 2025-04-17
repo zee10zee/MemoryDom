@@ -11,7 +11,7 @@
         <% } %>
      
     <h1>USER SIGN UP </h1>
-    <form action="/users/signup" method="post" enctype="multipart/form-data">
+    <form  id="signUpForm" action="/users/signup" method="post" enctype="multipart/form-data" >
    
         <div class="form-group mb-3 d-flex align-items-center ">
             <div class="form-group " style="width: 80%;">
@@ -20,21 +20,21 @@
          
             <div class="div mx-2 ml-auto" style="width: 20%;">
                 <label for="cameraBtn"> Profile pic</label>
-                <img src="https://images.unsplash.com/photo-1560217930-ed5820aea22a?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="cameraBtn ms-auto" id="cameraBtn">
+                <img src="/images/profilePic.jpg" class="cameraBtn ms-auto" id="cameraBtn">
            </div>
         </div>
-            <input class="rounded" type="file"  name="image" id="img" style="display: none; width: 0;">
+            <input class="rounded" type="file" autofocus  name="image" id="img" required style="display: none; width: 0;">
         
        <div class="form-group mb-3">
         <input class="form-control rounded" type="text" name="lname" id="lname" placeholder="your last name">
        </div>
      
        <div class="form-group mb-3">
-        <input class="form-control rounded" type="email" alt="email" id="email" name="email" placeholder="type your email please !">
+        <input class="form-control rounded" autocomplete="on" type="email" alt="email" id="email" name="email" placeholder="type your email please !">
        </div>
 
        <div class="form-group mb-3">
-        <input class="form-control rounded" type="password" alt="password" id="password" name="password" placeholder="type your password please !">
+        <input class="form-control rounded" type="password" autocomplete="off" alt="password" id="password" name="password" placeholder="type your password please !">
        </div>
 
        <div class="form-group mb-3 d-flex justify-content-center">

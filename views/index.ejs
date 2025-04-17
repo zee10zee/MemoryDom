@@ -35,7 +35,6 @@
               
             </script>
        <%} %>
-       <% if(posts.length){ %>
         <h1>THE POSTS !</h1>
         <div class="row my-3">
         <% posts.forEach((post, i )=>{%>
@@ -91,17 +90,7 @@
                </div>
 
                 <!-- commeining area -->
-                <div class="comment my-3" id="commentingArea">
-                    <form action="/posts/<%=post.id%>/comment" method="post" id="commentSubmitForm">
-                        <div class="form-group">
-                            <input class="form-control" type="text" name="comment" id="comment" required placeholder="add your comment">
-                        </div>
-                        <div class="form-group mt-2">
-                            <button id="actualCommentBtn" class="form-control btn btn-success btn-sm" type="submit">comment</button>
-                        </div>
-                       
-                    </form>
-                </div>
+                
                 <% } %>
             </div>
             <div class="likesCmntShareCount">
@@ -113,7 +102,19 @@
             </div>
 
             <div class="display-comments container border rounded my-3 py-2">
+            
                 <h3>Comments !</h3>
+                <div class="comment my-3" id="commentingArea">
+                    <form action="/posts/<%=post.id%>/comment" method="post" id="commentSubmitForm">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="comment" id="comment" required placeholder="add your comment">
+                        </div>
+                        <div class="form-group mt-2">
+                            <button id="actualCommentBtn" class="form-control btn btn-success btn-sm" type="submit">comment</button>
+                        </div>
+                       
+                    </form>
+                </div>
                 <ul id="commentList">
                     <% post.comments.forEach((comment, i)=>{ %>
                         <li class="d-flex liComment" data-id="<%=comment.comment_Id%>">
@@ -123,13 +124,13 @@
                                 <% console.log(JSON.stringify("logged in user from ejs " + loggedInUser)) %>
                             <div class="edit-delete d-flex justify-content-between px-3">
 
-                                 <form method="POST" action="/comment/<%= comment.comment_Id%>/update?_method=PATCH" class="form">
+                                 <!-- <form action="#" class="form">
                                     <button class="btn btn-success btn-sm editButton" id="editCommitBtn">Edit</button>
-                                 </form>
+                                 </form> -->
                                 
                                 <!-- delete form -->
                                 <form method="POST" action="/comment/<%=comment.comment_Id%>/delete?_method=DELETE" class="mx-2">
-                                    <button type="submit" name="deleteButton" id="deleteBtn" class="btn btn-danger btn-sm">delete</button>
+                                    <button type="submit" name="deleteButton" id="deleteBtn" class=" btn border border-danger  btn-sm">delete</button>
                                 </form>
                             </div>
                             <% } %>
@@ -137,7 +138,7 @@
                     <% }) %>
                 </ul>
                  <!-- modal -->
-                 <form id="formModal" name="modalForm" style="display: block;">
+                 <form id="formModal" name="modalForm" style="display: none;">
                     <div class="form-group">
                         <input class="form-control" name="modalInput" class="inputModal" required id="modalEditComment" placeholder="New Comment">
                     </div>
@@ -150,11 +151,7 @@
             </div>
             </div>
         <% }) %>
-        <% }else{ %>
-            <h3>No POST ! Let it be started by you !
-                <a href="/new">Post a memory !</a>
-            </h3>
-        <% } %>
+      
             <!-- modal -->
            
             <!-- end of modal -->
